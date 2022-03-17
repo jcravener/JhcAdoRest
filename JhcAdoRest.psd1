@@ -12,7 +12,7 @@
 RootModule = 'JhcAdoRest.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.1.4'
+ModuleVersion = '1.1.5'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -79,7 +79,13 @@ FunctionsToExport = @(
     'Invoke-JhcAdoRestPipelineRuns',
     'Invoke-JhcAdoRestBuild',
     'Invoke-JhcAdoRestBuildTimeline',
+    'Invoke-JhcAdoRestBuildListArtifacts',
     'Invoke-JhcAdoRestGitPullRequest',
+    'Invoke-JhcAdoRestGetCommits',
+    'Invoke-JhcAdoRestListRepositories',
+    'Invoke-JhcAdoRestListBranchPolicies',
+    'Invoke-JhcAdoRestGetBranchPolicyRevision',
+    'Invoke-JhcAdoRestCodeSearch',
     'Invoke-JhcAdoRestReleaseDefinition',
     'Invoke-JhcAdoRestRelease',
     'Select-JhcAdoRestAgentQueue',

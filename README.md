@@ -10,6 +10,12 @@ Provides access to:
 - Full YAML Pipeline definition payloads
 - Agent Pools;
 - Agent Pool Queues
-- Pull requests.
+- Pull requests
+- Build artifacts
+- Commits info
+- List Repositories
+- Branch policies
+- Branch policy revisions
+- Code search.
 
 The Select-* cmdlets transforms raw JSON response payloads into useful report objects for some of the cmdlets.

@@ -821,6 +821,69 @@ function Invoke-JhcAdoRestAgentPool {
     }
     end {}
 }
+function Invoke-JhcAdoRestTasks {
+    param (
+        [Parameter(Position = 0, Mandatory = $false)]
+        [System.Security.SecureString]
+        $Pat = $JhcAdoRestPat,
+        [Parameter(Position = 1, Mandatory = $false)]
+        [System.String]
+        $TaskId,
+        [Parameter(Position = 2, Mandatory = $false)]
+        [System.String]
+        $Organization = $JhcAdoRestOrganization,
+        [Parameter(Position = 3, Mandatory = $false)]
+        [System.String]
+        $ApiVersion = '6.0'
+    )
+
+    begin {
+        
+        if (-not $Pat) {
+            throw "PAT was not found. Run Set-JhcAdoRestEnvironment"
+        }
+        if (-not $JhcAdoRestOrganization) {
+            throw "JhcAdoRestOrganization was not found. Run Set-JhcAdoRestEnvironment"
+        }
+        if (-not $JhcAdoRestProject) {
+            throw "JhcAdoRestProject was not found. Run Set-JhcAdoRestEnvironment"
+        }
+        
+        $uri = 'https://dev.azure.com/' + $Organization + '/_apis/distributedtask/tasks/' +  $TaskId
+        
+        $uri += '?api-version=' + $ApiVersion
+        
+        
+        $header = PrepAdoRestApiAuthHeader -SecurePat $pat
+
+        $ct = 'application/json'
+    }
+    process {
+        Invoke-RestMethod -Uri $uri -Headers $header -Method Get -ContentType $ct
+    }
+    end {}
+}
+
+function Select-JhcAdoRestTasks {
+    
+    param (
+        [Parameter(Position = 0, Mandatory, ValueFromPipeline = $true)]
+        [System.Object[]]
+        $Value
+    )
+  
+    begin {
+        $p = 'name', @{n='taskId'; e={$_.id}}, 'friendlyName', 'description', 'category', 'definitionType', 'author', @{n='majorVersion'; e={$_.version.major}}, @{n='minorVersion'; e={$_.version.minor}}, @{n='patchVersion'; e={$_.version.patch}}, @{n='isTest'; e={$_.version.isTest}}
+    }
+
+    process {
+        foreach ($obj in $Value) {
+            $obj | Select-Object -Property $p
+        }
+    }
+
+    end {}
+}
 
 
 function Select-JhcAdoRestAgentQueue {
@@ -915,7 +978,10 @@ function Select-JhcAdoRestReleaseDefinition {
         $ExpandArtifacts = $false,
         [Parameter(Position = 2, Mandatory = $false)]
         [switch]
-        $ExpandPhases = $false
+        $ExpandPhases = $false,
+        [Parameter(Position = 3, Mandatory = $false)]
+        [switch]
+        $ExpandTasks = $false
     )
   
     begin {
@@ -931,7 +997,7 @@ function Select-JhcAdoRestReleaseDefinition {
                     $obj | Select-Object -Property ($p + @{n = 'artifactType'; e = { $artifact.type } }, @{n = 'artifactAlias'; e = { $artifact.alias } }, @{n = 'artifactDefinitionId'; e = { $artifact.definitionReference.definition.id } })
                 }    
             }
-            elseif ($ExpandPhases) {
+            elseif ($ExpandPhases -or $ExpandTasks) {
                 foreach ($env in $obj.environments) {
                                         
                     $line = $obj | Select-Object -Property ($p + @{n = 'envId'; e = { $env.id } }, @{n = 'envName'; e = { $env.name } })
@@ -942,7 +1008,23 @@ function Select-JhcAdoRestReleaseDefinition {
                         Add-Member -InputObject $line -MemberType NoteProperty -Name 'phaseType' -Value $phase.phaseType -Force
                         Add-Member -InputObject $line -MemberType NoteProperty -Name 'agentQueueId' -Value $phase.deploymentInput.queueId -Force
                         Add-Member -InputObject $line -MemberType NoteProperty -Name 'agentSpec' -Value $phase.deploymentInput.agentSpecification.identifier -Force
-                        $line
+
+                        if($ExpandTasks)
+                        {
+                            foreach($task in $phase.workflowTasks)
+                            {
+                                Add-Member -InputObject $line -MemberType NoteProperty -Name 'taskId' -Value $task.taskId -Force
+                                Add-Member -InputObject $line -MemberType NoteProperty -Name 'taskVersion' -Value $task.version -Force
+                                Add-Member -InputObject $line -MemberType NoteProperty -Name 'taskName' -Value $task.name -Force
+                                Add-Member -InputObject $line -MemberType NoteProperty -Name 'taskEnabled' -Value $task.enabled -Force
+                                Add-Member -InputObject $line -MemberType NoteProperty -Name 'taskDefinitionType' -Value $task.definitionType -Force
+                                $line
+                            }
+                        }
+                        else
+                        {
+                            $line
+                        }
                     }            
                 }
             }

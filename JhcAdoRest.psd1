@@ -21,7 +21,7 @@ ModuleVersion = '1.1.7'
 GUID = '155557b1-319e-4021-9746-f7fa105ad170'
 
 # Author of this module
-Author = 'jcravener@hotmail.com'
+Author = 'jcravener@hotmail.com', 'osimansaricloud@outlook.com'
 
 # Company or vendor of this module
 CompanyName = 'jcravener@hotmail.com'

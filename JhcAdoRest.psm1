@@ -413,7 +413,7 @@ function Invoke-JhcAdoRestGitPullRequest {
 
 }
 
-function Invoke-JhcAdoRestGetCommits {
+function Invoke-JhcAdoRestGitCommits {
     param (
         [Parameter(Position = 0, Mandatory = $false)]
         [System.Security.SecureString]
@@ -543,7 +543,7 @@ function Invoke-JhcAdoRestListBranchPolicies{
     end {}
 }
 
-function Invoke-JhcAdoRestGetBranchPolicyRevision{
+function Invoke-JhcAdoRestGitBranchPolicyRevision{
     param (
         [Parameter(Position = 0, Mandatory = $false)]
         [System.Security.SecureString]
@@ -882,6 +882,49 @@ function Select-JhcAdoRestTasks {
         }
     }
 
+    end {}
+}
+
+function Invoke-JhcAdoRestTaskGroups {
+    param (
+        [Parameter(Position = 0, Mandatory = $false)]
+        [System.Security.SecureString]
+        $Pat = $JhcAdoRestPat,
+        [Parameter(Position = 1, Mandatory = $false)]
+        [System.String]
+        $TaskGroupId,
+        [Parameter(Position = 2, Mandatory = $false)]
+        [System.String]
+        $Organization = $JhcAdoRestOrganization,
+        [Parameter(Position = 3, Mandatory = $false)]
+        [System.String]
+        $Project = $JhcAdoRestProject,
+        [Parameter(Position = 4, Mandatory = $false)]
+        [System.String]
+        $ApiVersion = '7.1-preview.1'
+    )
+
+    begin {
+        
+        if (-not $Pat) {
+            throw "PAT was not found. Run Set-JhcAdoRestEnvironment"
+        }
+        if (-not $JhcAdoRestOrganization) {
+            throw "JhcAdoRestOrganization was not found. Run Set-JhcAdoRestEnvironment"
+        }
+        if (-not $JhcAdoRestProject) {
+            throw "JhcAdoRestProject was not found. Run Set-JhcAdoRestEnvironment"
+        }       
+
+        $uri = 'https://dev.azure.com/' + $Organization + '/' + $Project + '/_apis/distributedtask/taskgroups/' + $TaskGroupId + '?api-version=' + $ApiVersion
+        
+        $header = PrepAdoRestApiAuthHeader -SecurePat $pat
+
+        $ct = 'application/json'
+    }
+    process {
+        Invoke-RestMethod -Uri $uri -Headers $header -Method Get -ContentType $ct
+    }
     end {}
 }
 

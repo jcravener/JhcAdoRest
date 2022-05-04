@@ -18,7 +18,7 @@ function Invoke-JhcAdoRestPipelinePreviewRun {
     )
 
     begin {
-        
+
         if (-not $Pat) {
             throw "PAT was not found. Run Set-JhcAdoRestEnvironment."
         }
@@ -28,9 +28,9 @@ function Invoke-JhcAdoRestPipelinePreviewRun {
         if (-not $JhcAdoRestProject) {
             throw "JhcAdoRestProject was not found. Run Set-JhcAdoRestEnvironment."
         }
-        
+
         $uri = 'https://dev.azure.com/' + $Organization + '/' + $Project + '/_apis/pipelines/' + $PipelineId + '/preview?&api-version=' + $ApiVersion
-        
+
         $header = PrepAdoRestApiAuthHeader -SecurePat $pat
 
         $body = "{
@@ -66,7 +66,7 @@ function Invoke-JhcAdoRestBuildDefinition {
     )
 
     begin {
-        
+
         if (-not $Pat) {
             throw "PAT was not found. Run Set-JhcAdoRestEnvironment"
         }
@@ -78,7 +78,7 @@ function Invoke-JhcAdoRestBuildDefinition {
         }
 
         $uri = 'https://dev.azure.com/' + $Organization + '/' + $Project + '/_apis/build/definitions/' + $PipelineId + '?api-version=' + $ApiVersion
-                
+
         $header = PrepAdoRestApiAuthHeader -SecurePat $pat
 
         $ct = 'application/json'
@@ -113,7 +113,7 @@ function Invoke-JhcAdoRestBuildList {
     )
 
     begin {
-        
+
         if (-not $Pat) {
             throw "PAT was not found. Run Set-JhcAdoRestEnvironment"
         }
@@ -123,9 +123,9 @@ function Invoke-JhcAdoRestBuildList {
         if (-not $JhcAdoRestProject) {
             throw "JhcAdoRestProject was not found. Run Set-JhcAdoRestEnvironment"
         }
-        
+
         $uri = 'https://dev.azure.com/' + $Organization + '/' + $Project + '/_apis/build/builds?definitions=' + $PipelineId +  '&$top=' + $Top +  '&api-version=' + $ApiVersion
-        
+
         $header = PrepAdoRestApiAuthHeader -SecurePat $pat
 
         $ct = 'application/json'
@@ -156,7 +156,7 @@ function Invoke-JhcAdoRestPipeline {
     )
 
     begin {
-        
+
         if (-not $Pat) {
             throw "PAT was not found. Run Set-JhcAdoRestEnvironment"
         }
@@ -166,9 +166,9 @@ function Invoke-JhcAdoRestPipeline {
         if (-not $JhcAdoRestProject) {
             throw "JhcAdoRestProject was not found. Run Set-JhcAdoRestEnvironment"
         }
-        
+
         $uri = 'https://dev.azure.com/' + $Organization + '/' + $Project + '/_apis/pipelines/' + $PipelineId + '?api-version=' + $ApiVersion
-        
+
         $header = PrepAdoRestApiAuthHeader -SecurePat $pat
 
         $ct = 'application/json'
@@ -203,7 +203,7 @@ function Invoke-JhcAdoRestPipelineRuns {
     )
 
     begin {
-        
+
         if (-not $Pat) {
             throw "PAT was not found. Run Set-JhcAdoRestEnvironment"
         }
@@ -213,9 +213,9 @@ function Invoke-JhcAdoRestPipelineRuns {
         if (-not $JhcAdoRestProject) {
             throw "JhcAdoRestProject was not found. Run Set-JhcAdoRestEnvironment"
         }
-        
+
         $uri = 'https://dev.azure.com/' + $Organization + '/' + $Project + '/_apis/pipelines/' + $PipelineId
-        
+
         if ($RunId) {
             $uri += '/runs/' + $RunId + '?api-version='
         }
@@ -224,7 +224,7 @@ function Invoke-JhcAdoRestPipelineRuns {
         }
 
         $uri += $ApiVersion
-        
+
         $header = PrepAdoRestApiAuthHeader -SecurePat $pat
 
         $ct = 'application/json'
@@ -257,7 +257,7 @@ function Invoke-JhcAdoRestBuild {
     )
 
     begin {
-        
+
         if (-not $Pat) {
             throw "PAT was not found. Run Set-JhcAdoRestEnvironment"
         }
@@ -268,9 +268,9 @@ function Invoke-JhcAdoRestBuild {
             throw "JhcAdoRestProject was not found. Run Set-JhcAdoRestEnvironment"
         }
 
-        
+
         $uri = 'https://dev.azure.com/' + $Organization + '/' + $Project + '/_apis/build/builds/' + $BuildId + '?api-version=' + $ApiVersion
-        
+
         $header = PrepAdoRestApiAuthHeader -SecurePat $pat
 
         $ct = 'application/json'
@@ -303,7 +303,7 @@ function Invoke-JhcAdoRestBuildTimeline {
     )
 
     begin {
-        
+
         if (-not $Pat) {
             throw "PAT was not found. Run Set-JhcAdoRestEnvironment"
         }
@@ -314,9 +314,9 @@ function Invoke-JhcAdoRestBuildTimeline {
             throw "JhcAdoRestProject was not found. Run Set-JhcAdoRestEnvironment"
         }
 
-        
+
         $uri = 'https://dev.azure.com/' + $Organization + '/' + $Project + '/_apis/build/builds/' + $BuildId + '/timeline/?api-version=' + $ApiVersion
-        
+
         $header = PrepAdoRestApiAuthHeader -SecurePat $pat
 
         $ct = 'application/json'
@@ -399,9 +399,9 @@ function Invoke-JhcAdoRestGitPullRequest {
         if (-not $JhcAdoRestProject) {
             throw "JhcAdoRestProject was not found. Run Set-JhcAdoRestEnvironment"
         }
-        
+
         $uri = 'https://dev.azure.com/' + $Organization + '/' + $Project + '/_apis/git//repositories/' + $RepositoryId + '/pullrequests/' + $PullRequestId + '?api-version=' + $ApiVersion
-        
+
         $header = PrepAdoRestApiAuthHeader -SecurePat $pat
 
         $ct = 'application/json'
@@ -653,7 +653,7 @@ function Invoke-JhcAdoRestReleaseDefinition {
     )
 
     begin {
-        
+
         if (-not $Pat) {
             throw "PAT was not found. Run Set-JhcAdoRestEnvironment"
         }
@@ -663,9 +663,9 @@ function Invoke-JhcAdoRestReleaseDefinition {
         if (-not $JhcAdoRestProject) {
             throw "JhcAdoRestProject was not found. Run Set-JhcAdoRestEnvironment"
         }
-                
+
         $uri = 'https://vsrm.dev.azure.com/' + $Organization + '/' + $Project + '/_apis/release/definitions/' + $DefinitionId + '?api-version=' + $ApiVersion
-        
+
         $header = PrepAdoRestApiAuthHeader -SecurePat $pat
 
         $ct = 'application/json'
@@ -697,7 +697,7 @@ function Invoke-JhcAdoRestRelease {
     )
 
     begin {
-        
+
         if (-not $Pat) {
             throw "PAT was not found. Run Set-JhcAdoRestEnvironment"
         }
@@ -707,11 +707,11 @@ function Invoke-JhcAdoRestRelease {
         if (-not $JhcAdoRestProject) {
             throw "JhcAdoRestProject was not found. Run Set-JhcAdoRestEnvironment"
         }
-                
+
         # GET https://vsrm.dev.azure.com/{organization}/{project}/_apis/release/releases/{releaseId}?api-version=6.1-preview.8
 
         $uri = 'https://vsrm.dev.azure.com/' + $Organization + '/' + $Project + '/_apis/release/releases/' + $ReleaseId + '?api-version=' + $ApiVersion
-        
+
         $header = PrepAdoRestApiAuthHeader -SecurePat $pat
 
         $ct = 'application/json'
@@ -742,7 +742,7 @@ function Invoke-JhcAdoRestAgentQueue {
     )
 
     begin {
-        
+
         if (-not $Pat) {
             throw "PAT was not found. Run Set-JhcAdoRestEnvironment"
         }
@@ -752,11 +752,11 @@ function Invoke-JhcAdoRestAgentQueue {
         if (-not $JhcAdoRestProject) {
             throw "JhcAdoRestProject was not found. Run Set-JhcAdoRestEnvironment"
         }
-                
+
         # GET https://dev.azure.com/{organization}/{project}/_apis/distributedtask/queues?queueIds={queueIds}&api-version=6.0-preview.1
 
         $uri = 'https://dev.azure.com/' + $Organization + '/' + $Project + '/_apis/distributedtask/queues?queueIds=' + $AgentQueueId + '&api-version=' + $ApiVersion
-        
+
         $header = PrepAdoRestApiAuthHeader -SecurePat $pat
 
         $ct = 'application/json'
@@ -787,7 +787,7 @@ function Invoke-JhcAdoRestAgentPool {
     )
 
     begin {
-        
+
         if (-not $Pat) {
             throw "PAT was not found. Run Set-JhcAdoRestEnvironment"
         }
@@ -797,9 +797,9 @@ function Invoke-JhcAdoRestAgentPool {
         if (-not $JhcAdoRestProject) {
             throw "JhcAdoRestProject was not found. Run Set-JhcAdoRestEnvironment"
         }
-        
+
         $uri = 'https://dev.azure.com/' + $Organization + '/_apis/distributedtask/pools?'
-        
+
         if ($PoolId) {
             # https://dev.azure.com/{organization}/_apis/distributedtask/pools?poolIds=1234&api-version=6.0
             $uri += 'poolIds=' + $PoolId
@@ -810,8 +810,8 @@ function Invoke-JhcAdoRestAgentPool {
         }
 
         $uri += '&api-version=' + $ApiVersion
-        
-        
+
+
         $header = PrepAdoRestApiAuthHeader -SecurePat $pat
 
         $ct = 'application/json'
@@ -838,7 +838,7 @@ function Invoke-JhcAdoRestTasks {
     )
 
     begin {
-        
+
         if (-not $Pat) {
             throw "PAT was not found. Run Set-JhcAdoRestEnvironment"
         }
@@ -848,12 +848,12 @@ function Invoke-JhcAdoRestTasks {
         if (-not $JhcAdoRestProject) {
             throw "JhcAdoRestProject was not found. Run Set-JhcAdoRestEnvironment"
         }
-        
+
         $uri = 'https://dev.azure.com/' + $Organization + '/_apis/distributedtask/tasks/' +  $TaskId
-        
+
         $uri += '?api-version=' + $ApiVersion
-        
-        
+
+
         $header = PrepAdoRestApiAuthHeader -SecurePat $pat
 
         $ct = 'application/json'
@@ -865,13 +865,13 @@ function Invoke-JhcAdoRestTasks {
 }
 
 function Select-JhcAdoRestTasks {
-    
+
     param (
         [Parameter(Position = 0, Mandatory, ValueFromPipeline = $true)]
         [System.Object[]]
         $Value
     )
-  
+
     begin {
         $p = 'name', @{n='taskId'; e={$_.id}}, 'friendlyName', 'description', 'category', 'definitionType', 'author', @{n='majorVersion'; e={$_.version.major}}, @{n='minorVersion'; e={$_.version.minor}}, @{n='patchVersion'; e={$_.version.patch}}, @{n='isTest'; e={$_.version.isTest}}
     }
@@ -905,7 +905,7 @@ function Invoke-JhcAdoRestTaskGroups {
     )
 
     begin {
-        
+
         if (-not $Pat) {
             throw "PAT was not found. Run Set-JhcAdoRestEnvironment"
         }
@@ -914,10 +914,10 @@ function Invoke-JhcAdoRestTaskGroups {
         }
         if (-not $JhcAdoRestProject) {
             throw "JhcAdoRestProject was not found. Run Set-JhcAdoRestEnvironment"
-        }       
+        }
 
         $uri = 'https://dev.azure.com/' + $Organization + '/' + $Project + '/_apis/distributedtask/taskgroups/' + $TaskGroupId + '?api-version=' + $ApiVersion
-        
+
         $header = PrepAdoRestApiAuthHeader -SecurePat $pat
 
         $ct = 'application/json'
@@ -930,13 +930,13 @@ function Invoke-JhcAdoRestTaskGroups {
 
 
 function Select-JhcAdoRestAgentQueue {
-    
+
     param (
         [Parameter(Position = 0, Mandatory, ValueFromPipeline = $true)]
         [System.Object[]]
         $Value
     )
-  
+
     begin {
         $p = 'id', 'name', @{n = 'poolId'; e = { $_.pool.id } }, @{n = 'poolName'; e = { $_.pool.name } }, @{n = 'poolIsHosted'; e = { $_.pool.isHosted } }, @{n = 'poolType'; e = { $_.pool.poolType } }, @{n = 'poolSize'; e = { $_.pool.size } }
     }
@@ -950,13 +950,13 @@ function Select-JhcAdoRestAgentQueue {
     end {}
 }
 function Select-JhcAdoRestAgentPool {
-    
+
     param (
         [Parameter(Position = 0, Mandatory, ValueFromPipeline = $true)]
         [System.Object[]]
         $Value
     )
-  
+
     begin {
         $p = 'createdOn', 'targetSize', 'size', 'id', 'name', 'isHosted'
     }
@@ -971,33 +971,62 @@ function Select-JhcAdoRestAgentPool {
 }
 
 function Select-JhcAdoRestBuildDefinition {
-    
+
     param (
         [Parameter(Position = 0, Mandatory, ValueFromPipeline = $true)]
         [System.Object[]]
         $Value
     )
-  
+
     begin {
-        $p = 'id', 'createdDate', 'revision', @{n = 'authoredByuniqueName'; e = { $_.authoredBy.uniqueName } }, 'path', 'name', @{n = 'processType'; e = { $_.process.type } }, @{n = 'yamlFilename'; e = { $_.process.yamlFilename } }, @{n = 'repoName'; e = { $_.repository.name } }, @{n = 'repoBranch'; e = { $_.repository.defaultBranch } }, @{n = 'pool'; e = { $_.queue.name } }, @{n = 'uiUrl'; e = { PrepAdoUiUrl -Id $_.id -Type 'BuildDefinition' } }
+        $p = 'id', 'createdDate', 'revision', @{n = 'authoredByuniqueName'; e = { $_.authoredBy.uniqueName } }, 'path', 'name', @{n = 'processType'; e = { $_.process.type } }, @{n = 'yamlFilename'; e = { $_.process.yamlFilename } }, @{n = 'repoName'; e = { $_.repository.name } }, @{n = 'repoBranch'; e = { $_.repository.defaultBranch } }, 'yamlJobName', @{n = 'pool'; e = { $_.queue.name } }, @{n = 'uiUrl'; e = { PrepAdoUiUrl -Id $_.id -Type 'BuildDefinition' } }
     }
 
     process {
         foreach ($obj in $Value) {
-            $obj | Select-Object -Property $p
+
+            if ($obj.process.type -eq 2){
+
+                try{
+                    $finalYaml = (Invoke-JhcAdoRestPipelinePreviewRun -PipelineId $obj.id).finalYaml
+                    $stages = (ConvertFrom-Yaml -Yaml $finalYaml).stages
+                    if (!$stages){
+                        $obj | Select-Object -Property $p
+                        break
+                    }
+                }
+                catch{
+                    $obj | Select-Object -Property $p
+                    break
+                }
+
+                foreach ($job in $stages.jobs) {
+                    $line = $obj | Select-Object -Property $p
+                    $line.'yamlJobName' = $job.job
+                    if($job.pool){
+                        $line.'pool' = $job.pool['name']
+                    }
+
+                    $line
+                }
+            }
+            else{
+                $obj | Select-Object -Property $p
+            }
+
         }
     }
 
     end {}
 }
 function Select-JhcAdoRestBuild {
-    
+
     param (
         [Parameter(Position = 0, Mandatory, ValueFromPipeline = $true)]
         [System.Object[]]
         $Value
     )
-  
+
     begin {
         $p = 'id', @{n='definitionId'; e = {$_.definition.id}}, 'buildNumber', 'status', 'result', 'startTime', @{n='requestedForName'; e = { $_.requestedFor.uniqueName }}
     }
@@ -1011,7 +1040,7 @@ function Select-JhcAdoRestBuild {
     end {}
 }
 function Select-JhcAdoRestReleaseDefinition {
-    
+
     param (
         [Parameter(Position = 0, Mandatory, ValueFromPipeline = $true)]
         [System.Object[]]
@@ -1026,7 +1055,7 @@ function Select-JhcAdoRestReleaseDefinition {
         [switch]
         $ExpandTasks = $false
     )
-  
+
     begin {
         $p = 'id', 'createdOn', 'revision', @{n = 'createdByuniqueName'; e = { $_.createdBy.uniqueName } }, 'path', 'name', @{n = 'lastReleaseId'; e = { $_.lastRelease.id } }, @{n = 'lastReleaseName'; e = { $_.lastRelease.name } }, @{n = 'lastReleaseDate'; e = { $_.lastRelease.createdOn } }, @{n = 'uiUrl'; e = { PrepAdoUiUrl -Id $_.id -Type 'ReleaseDefinition' } }
         $pp = $p + @{n = 'artifactsType'; e = { $_.artifacts.type } }, @{n = 'artifactsAlias'; e = { $_.artifacts.alias } }
@@ -1034,15 +1063,15 @@ function Select-JhcAdoRestReleaseDefinition {
 
     process {
         foreach ($obj in $Value) {
-            
+
             if ($ExpandArtifacts) {
                 foreach ($artifact in $obj.artifacts) {
                     $obj | Select-Object -Property ($p + @{n = 'artifactType'; e = { $artifact.type } }, @{n = 'artifactAlias'; e = { $artifact.alias } }, @{n = 'artifactDefinitionId'; e = { $artifact.definitionReference.definition.id } })
-                }    
+                }
             }
             elseif ($ExpandPhases -or $ExpandTasks) {
                 foreach ($env in $obj.environments) {
-                                        
+
                     $line = $obj | Select-Object -Property ($p + @{n = 'envId'; e = { $env.id } }, @{n = 'envName'; e = { $env.name } })
 
                     foreach ($phase in $env.deployPhases ) {
@@ -1068,7 +1097,7 @@ function Select-JhcAdoRestReleaseDefinition {
                         {
                             $line
                         }
-                    }            
+                    }
                 }
             }
             else {
@@ -1081,7 +1110,7 @@ function Select-JhcAdoRestReleaseDefinition {
 }
 
 function Select-JhcAdoRestRelease {
-    
+
     param (
         [Parameter(Position = 0, Mandatory, ValueFromPipeline = $true)]
         [System.Object[]]
@@ -1090,7 +1119,7 @@ function Select-JhcAdoRestRelease {
         [switch]
         $ExpandSteps = $false
     )
-  
+
     begin {
         $p = 'id', 'createdOn', 'name', 'status', 'description', 'reason', @{n = 'createdByuniqueName'; e = { $_.createdBy.uniqueName } }, @{n = 'definitionId'; e = { $_.releaseDefinition.id } }, @{n = 'definitionName'; e = { $_.releaseDefinition.name } }, @{n = 'definitionPath'; e = { $_.releaseDefinition.path } }, @{n = 'uiUrl'; e = { PrepAdoUiUrl -Id $_.id -Type 'Release' } }
     }
@@ -1100,11 +1129,11 @@ function Select-JhcAdoRestRelease {
 
             if ($ExpandSteps) {
                 foreach ($env in $obj.environments) {
-                                        
+
                     $line = $obj | Select-Object -Property ($p + @{n = 'envName'; e = { $env.name } }, @{n = 'envStatus'; e = { $env.status } })
 
                     foreach ($phase in $env.deploySteps.releaseDeployPhases) {
-                        
+
                         Add-Member -InputObject $line -MemberType NoteProperty -Name 'phaseId' -Value $phase.phaseId -Force
                         Add-Member -InputObject $line -MemberType NoteProperty -Name 'phaseName' -Value $phase.name -Force
                         Add-Member -InputObject $line -MemberType NoteProperty -Name 'phaseType' -Value $phase.phaseType -Force
@@ -1115,7 +1144,7 @@ function Select-JhcAdoRestRelease {
                             Add-Member -InputObject $line -MemberType NoteProperty -Name 'jobName' -Value $job.name -Force
                             Add-Member -InputObject $line -MemberType NoteProperty -Name 'jobStatus' -Value $job.status -Force
                             Add-Member -InputObject $line -MemberType NoteProperty -Name 'jobAgentName' -Value $job.agentName -Force
-                            
+
                             $line
                         }
                     }
@@ -1123,7 +1152,7 @@ function Select-JhcAdoRestRelease {
                 }
             }
             else {
-            
+
                 $obj | Select-Object -Property $p
 
             }
@@ -1167,7 +1196,7 @@ function Set-JhcAdoRestEnvironment {
     if ($AdoProject) {
         $Global:JhcAdoRestProject = $AdoProject
     }
-    
+
     if ($AdoPat) {
         $Global:JhcAdoRestPat = $AdoPat
     }
@@ -1180,21 +1209,21 @@ function PrepEnv {
     if ((-not $Global:JhcAdoRestOrganization) -or (-not $Global:JhcAdoRestProject) -or (-not $Global:JhcAdoRestPat)) {
         Write-Host -ForegroundColor Yellow -Object "Setting up environment for JhcAdoRest module."
     }
-    
+
     while (-not $Global:JhcAdoRestOrganization) {
         $Global:JhcAdoRestOrganization = Read-Host -Prompt "Input your Azure DevOps Organization name"
     }
-    
+
     while (-not $Global:JhcAdoRestProject) {
         $Global:JhcAdoRestProject = Read-Host -Prompt "Input your Azure DevOps Project name"
     }
-    
+
     while (-not $Global:JhcAdoRestPat) {
         $Global:JhcAdoRestPat = Read-Host -Prompt "Input your Azure DevOps personal access token" -AsSecureString
     }
-    
+
     Write-Host -ForegroundColor Green -Object "Environment is ready JhcAdoRest module."
-    Write-Host -ForegroundColor Green -Object "Organization: $($Global:JhcAdoRestOrganization), Project: $($Global:JhcAdoRestProject), PAT: $($Global:JhcAdoRestPat)"    
+    Write-Host -ForegroundColor Green -Object "Organization: $($Global:JhcAdoRestOrganization), Project: $($Global:JhcAdoRestProject), PAT: $($Global:JhcAdoRestPat)"
 }
 
 function PrepAdoRestApiAuthHeader {
@@ -1243,7 +1272,7 @@ function PrepAdoUiUrl {
         $Project = $JhcAdoRestProject
     )
 
-    $typeMap = @{ 'BuildDefinition' = '_build?definitionId'; 
+    $typeMap = @{ 'BuildDefinition' = '_build?definitionId';
         'Build'                     = '_build/results?buildId';
         'ReleaseDefinition'         = '_release?_a=releases&view=all&definitionId';
         'Release'                   = '_releaseProgress?_a=release-pipeline-progress&releaseId'

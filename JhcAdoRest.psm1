@@ -1024,8 +1024,14 @@ function Select-JhcAdoRestReleaseDefinition {
         $ExpandPhases = $false,
         [Parameter(Position = 3, Mandatory = $false)]
         [switch]
-        $ExpandTasks = $false
-    )
+        $ExpandTasks = $false,
+        [Parameter(Position = 4, Mandatory = $false)]
+        [System.String[]]
+        $TaskInputPropertyList,
+        [Parameter(Position = 5, Mandatory = $false)]
+        [switch]
+        $ExpandPreApprovals = $false
+        )
   
     begin {
         $p = 'id', 'createdOn', 'revision', @{n = 'createdByuniqueName'; e = { $_.createdBy.uniqueName } }, 'path', 'name', @{n = 'lastReleaseId'; e = { $_.lastRelease.id } }, @{n = 'lastReleaseName'; e = { $_.lastRelease.name } }, @{n = 'lastReleaseDate'; e = { $_.lastRelease.createdOn } }, @{n = 'uiUrl'; e = { PrepAdoUiUrl -Id $_.id -Type 'ReleaseDefinition' } }
@@ -1045,13 +1051,24 @@ function Select-JhcAdoRestReleaseDefinition {
                                         
                     $line = $obj | Select-Object -Property ($p + @{n = 'envId'; e = { $env.id } }, @{n = 'envName'; e = { $env.name } })
 
+                    if($ExpandPreApprovals) {
+                        Add-Member -InputObject $line -MemberType NoteProperty -Name 'automatedApproval' -Value $env.preDeployApprovals.approvals.isAutomated  -Force
+
+                        if($env.preDeployApprovals.approvals.approver) {
+                            Add-Member -InputObject $line -MemberType NoteProperty -Name 'approvers' -Value $env.preDeployApprovals.approvals.approver.displayName -Force
+                        }
+                        else {
+                            Add-Member -InputObject $line -MemberType NoteProperty -Name 'approvers' -Value $null  -Force
+                        }
+                    }
+
                     foreach ($phase in $env.deployPhases ) {
                         Add-Member -InputObject $line -MemberType NoteProperty -Name 'phaseId' -Value $phase.id -Force
                         Add-Member -InputObject $line -MemberType NoteProperty -Name 'phaseName' -Value $phase.name -Force
                         Add-Member -InputObject $line -MemberType NoteProperty -Name 'phaseType' -Value $phase.phaseType -Force
                         Add-Member -InputObject $line -MemberType NoteProperty -Name 'agentQueueId' -Value $phase.deploymentInput.queueId -Force
                         Add-Member -InputObject $line -MemberType NoteProperty -Name 'agentSpec' -Value $phase.deploymentInput.agentSpecification.identifier -Force
-
+                        
                         if($ExpandTasks)
                         {
                             foreach($task in $phase.workflowTasks)
@@ -1061,6 +1078,15 @@ function Select-JhcAdoRestReleaseDefinition {
                                 Add-Member -InputObject $line -MemberType NoteProperty -Name 'taskName' -Value $task.name -Force
                                 Add-Member -InputObject $line -MemberType NoteProperty -Name 'taskEnabled' -Value $task.enabled -Force
                                 Add-Member -InputObject $line -MemberType NoteProperty -Name 'taskDefinitionType' -Value $task.definitionType -Force
+                                
+                                if($TaskInputPropertyList)
+                                {
+                                    foreach($prop in $TaskInputPropertyList)
+                                    {
+                                        Add-Member -InputObject $line -MemberType NoteProperty -Name $prop -Value $task.inputs.$prop -Force
+                                    }
+                                }
+
                                 $line
                             }
                         }

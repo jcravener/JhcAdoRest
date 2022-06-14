@@ -8,13 +8,16 @@ function Invoke-JhcAdoRestPipelinePreviewRun {
         $PipelineId,
         [Parameter(Position = 2, Mandatory = $false)]
         [System.String]
-        $Organization = $JhcAdoRestOrganization,
+        $RefName,
         [Parameter(Position = 3, Mandatory = $false)]
         [System.String]
-        $Project = $JhcAdoRestProject,
+        $Organization = $JhcAdoRestOrganization,
         [Parameter(Position = 4, Mandatory = $false)]
         [System.String]
-        $ApiVersion = '6.1-preview.1'
+        $Project = $JhcAdoRestProject,
+        [Parameter(Position = 5, Mandatory = $false)]
+        [System.String]
+        $ApiVersion = '7.1-preview.1'
     )
 
     begin {
@@ -33,13 +36,28 @@ function Invoke-JhcAdoRestPipelinePreviewRun {
         
         $header = PrepAdoRestApiAuthHeader -SecurePat $pat
 
-        $body = "{
+        $body = "{        
         `n  `"PreviewRun`": true
         `n}"
 
         $ct = 'application/json'
     }
     process {
+
+        if($null -ne $RefName){
+            $body = "{
+                `n    `"resources`": {
+                `n        `"repositories`": {
+                `n            `"self`": {
+                `n                `"refName`": `"refs/heads/$($RefName)`"
+                `n            }
+                `n        }
+                `n    },
+                `n    `"previewRun`": true
+                `n}
+                `n"                
+        }
+
         Invoke-RestMethod -Uri $uri -Headers $header -Method POST -Body $body -ContentType $ct
     }
     end {}

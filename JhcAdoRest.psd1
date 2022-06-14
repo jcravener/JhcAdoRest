@@ -12,7 +12,7 @@
 RootModule = 'JhcAdoRest.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.2.1'
+ModuleVersion = '1.2.2'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -30,7 +30,7 @@ CompanyName = 'jcravener@hotmail.com'
 Copyright = 'jcravener@hotmail.com'
 
 # Description of the functionality provided by this module
-Description = 'Collection of Cmdlets that run Azure Dev Ops Rest API calls. Provides access to Build definitions, specific Builds and Build Timelines.; Release definitions and specific releases; Pipelines and pipeline runs; Full YAML Pipeline definition payloads; Agent Pools; Agent Pool Queues; Pull requests.  The Select-* cmdlets transforms raw JSON response payloads into useful report objects.'
+Description = 'Collection of Cmdlets that run Azure Dev Ops Rest API calls. Provides access to Build definitions, specific Builds and Build Timelines.; Release definitions and specific releases; Pipelines and pipeline runs; Full YAML Pipeline definition payloads; Agent Pools; Agent Pool Queues; Pull requests; Git repos and items; The Select-* cmdlets transforms raw JSON response payloads into useful report objects.'
 
 # Minimum version of the PowerShell engine required by this module
 # PowerShellVersion = ''
@@ -79,10 +79,11 @@ FunctionsToExport = @(
     'Invoke-JhcAdoRestBuildListArtifacts',
     'Invoke-JhcAdoRestBuildTimeline',
     'Invoke-JhcAdoRestCodeSearch',
-    'Invoke-JhcAdoRestGitPullRequest',
+    'Invoke-JhcAdoRestGitItem',
+    'Invoke-JhcAdoRestGitListItem',
     'Invoke-JhcAdoRestGitListRefs',
     'Invoke-JhcAdoRestGitListRepos',
-    'Invoke-JhcAdoRestGitListItem',
+    'Invoke-JhcAdoRestGitPullRequest',
     'Invoke-JhcAdoRestListBranchPolicies',
     'Invoke-JhcAdoRestPipeline',
     'Invoke-JhcAdoRestPipelinePreviewRun',
@@ -95,12 +96,12 @@ FunctionsToExport = @(
     'Select-JhcAdoRestAgentQueue',
     'Select-JhcAdoRestBuild',
     'Select-JhcAdoRestBuildDefinition',
+    'Select-JhcAdoRestGitListItem',
+    'Select-JhcAdoRestGitRefs',
+    'Select-JhcAdoRestGitRepo',
     'Select-JhcAdoRestRelease',
     'Select-JhcAdoRestReleaseDefinition',
     'Select-JhcAdoRestTasks',
-    'Select-JhcAdoRestGitRepo'
-    'Select-JhcAdoRestGitRefs',
-    'Select-JhcAdoRestGitListItem',
     'Set-JhcAdoRestEnvironment'
 )
 

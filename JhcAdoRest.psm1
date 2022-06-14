@@ -527,8 +527,6 @@ function Invoke-JhcAdoRestGitListItem {
         [ValidateSet("none", "oneLevel", "oneLevelPlusNestedEmptyFolders", "full")]
         [System.String]
         $RecursionLevel = "none",
-        [System.String]
-        $Organization = $JhcAdoRestOrganization,
         [Parameter(Position = 3, Mandatory = $false)]
         [System.String]
         $ScopePath,
@@ -537,8 +535,11 @@ function Invoke-JhcAdoRestGitListItem {
         $Branch,
         [Parameter(Position = 5, Mandatory = $false)]
         [System.String]
-        $Project = $JhcAdoRestProject,
+        $Organization = $JhcAdoRestOrganization,
         [Parameter(Position = 6, Mandatory = $false)]
+        [System.String]
+        $Project = $JhcAdoRestProject,
+        [Parameter(Position = 7, Mandatory = $false)]
         [System.String]
         $ApiVersion = '7.1-preview.1'
     )
@@ -575,6 +576,76 @@ function Invoke-JhcAdoRestGitListItem {
     }
     end {}
 }
+
+function Invoke-JhcAdoRestGitItem {
+    param (
+        [Parameter(Position = 0, Mandatory = $false)]
+        [System.Security.SecureString]
+        $Pat = $JhcAdoRestPat,
+        [Parameter(Position = 1, Mandatory)]
+        [System.String]
+        $RepositoryId,
+        [Parameter(Position = 2)]
+        [ValidateSet("none", "oneLevel", "oneLevelPlusNestedEmptyFolders", "full")]
+        [System.String]
+        $RecursionLevel = "none",
+        [Parameter(Position = 3, Mandatory = $false)]
+        [System.String]
+        $ScopePath,
+        [Parameter(Position = 4, Mandatory = $false)]
+        [System.String]
+        $Branch,
+        [Parameter(Position = 5, Mandatory = $false)]
+        [switch]
+        $Download = $false,
+        [Parameter(Position = 6, Mandatory = $false)]
+        [System.String]
+        $Organization = $JhcAdoRestOrganization,
+        [Parameter(Position = 7, Mandatory = $false)]
+        [System.String]
+        $Project = $JhcAdoRestProject,
+        [Parameter(Position = 8, Mandatory = $false)]
+        [System.String]
+        $ApiVersion = '7.1-preview.1'
+    )
+
+    begin {
+        if (-not $Pat) {
+            throw "PAT was not found. Run Set-JhcAdoRestEnvironment"
+        }
+        if (-not $JhcAdoRestOrganization) {
+            throw "JhcAdoRestOrganization was not found. Run Set-JhcAdoRestEnvironment"
+        }
+        if (-not $JhcAdoRestProject) {
+            throw "JhcAdoRestProject was not found. Run Set-JhcAdoRestEnvironment"
+        }
+        
+        # GET https://dev.azure.com/{organization}/{project}/_apis/git/repositories/{repositoryId}/items?path={path}&api-version=7.1-preview.1
+        # GET https://dev.azure.com/{organization}/{project}/_apis/git/repositories/{repositoryId}/items?path={path}&scopePath={scopePath}&recursionLevel={recursionLevel}&includeContentMetadata={includeContentMetadata}&latestProcessedChange={latestProcessedChange}&download={download}&$format={$format}&versionDescriptor.version={versionDescriptor.version}&versionDescriptor.versionOptions={versionDescriptor.versionOptions}&versionDescriptor.versionType={versionDescriptor.versionType}&includeContent={includeContent}&resolveLfs={resolveLfs}&sanitize={sanitize}&api-version=7.1-preview.1
+
+        $uri = 'https://dev.azure.com/' + $Organization + '/' + $Project + '/_apis/git/repositories/' + $RepositoryId  + '/items?scopePath=' + $ScopePath + '&recursionLevel=' + $RecursionLevel
+        
+        $header = PrepAdoRestApiAuthHeader -SecurePat $pat
+
+        $ct = 'application/json'
+    }
+    process {
+
+        if($null -ne $Ref) {
+            $uri += '&versionDescriptor.version=' + $Ref + '&versionDescriptor.versionType=branch'
+        }
+
+        if($null -ne $Download){
+            $uri += '&download=' + $Download.ToString().ToLower();
+        }
+        
+        $uri += '&api-version=' + $ApiVersion
+
+        Invoke-RestMethod -Uri $uri -Headers $header -Method Get -ContentType $ct
+    }
+    end {}
+}
+
 
 function Invoke-JhcAdoRestGitCommits {
     param (

@@ -431,6 +431,151 @@ function Invoke-JhcAdoRestGitPullRequest {
 
 }
 
+function Invoke-JhcAdoRestGitListRepos {
+    param (
+        [Parameter(Position = 0, Mandatory = $false)]
+        [System.Security.SecureString]
+        $Pat = $JhcAdoRestPat,
+        [System.String]
+        $Organization = $JhcAdoRestOrganization,
+        [Parameter(Position = 1, Mandatory = $false)]
+        [System.String]
+        $Project = $JhcAdoRestProject,
+        [Parameter(Position = 2, Mandatory = $false)]
+        [System.String]
+        $ApiVersion = '7.1-preview.1'
+    )
+    begin {
+        if (-not $Pat) {
+            throw "PAT was not found. Run Set-JhcAdoRestEnvironment"
+        }
+        if (-not $JhcAdoRestOrganization) {
+            throw "JhcAdoRestOrganization was not found. Run Set-JhcAdoRestEnvironment"
+        }
+        if (-not $JhcAdoRestProject) {
+            throw "JhcAdoRestProject was not found. Run Set-JhcAdoRestEnvironment"
+        }
+        
+        # GET https://dev.azure.com/{organization}/{project}/_apis/git/repositories?api-version=7.1-preview.1
+
+        $uri = 'https://dev.azure.com/' + $Organization + '/' + $Project + '/_apis/git/repositories' + '?api-version=' + $ApiVersion
+        
+        $header = PrepAdoRestApiAuthHeader -SecurePat $pat
+
+        $ct = 'application/json'
+    }
+    process {
+        Invoke-RestMethod -Uri $uri -Headers $header -Method Get -ContentType $ct
+    }
+    end {}
+
+}
+
+function Invoke-JhcAdoRestGitListRefs {
+    param (
+        [Parameter(Position = 0, Mandatory = $false)]
+        [System.Security.SecureString]
+        $Pat = $JhcAdoRestPat,
+        [Parameter(Position = 1, Mandatory)]
+        [System.String]
+        $RepositoryId,
+        [System.String]
+        $Organization = $JhcAdoRestOrganization,
+        [Parameter(Position = 3, Mandatory = $false)]
+        [System.String]
+        $Project = $JhcAdoRestProject,
+        [Parameter(Position = 4, Mandatory = $false)]
+        [System.String]
+        $ApiVersion = '7.1-preview.1'
+    )
+
+    begin {
+        if (-not $Pat) {
+            throw "PAT was not found. Run Set-JhcAdoRestEnvironment"
+        }
+        if (-not $JhcAdoRestOrganization) {
+            throw "JhcAdoRestOrganization was not found. Run Set-JhcAdoRestEnvironment"
+        }
+        if (-not $JhcAdoRestProject) {
+            throw "JhcAdoRestProject was not found. Run Set-JhcAdoRestEnvironment"
+        }
+        
+        # GET https://dev.azure.com/{organization}/{project}/_apis/git/repositories/{repositoryId}/refs?api-version=7.1-preview.1
+
+        $uri = 'https://dev.azure.com/' + $Organization + '/' + $Project + '/_apis/git/repositories/' + $RepositoryId  + '/refs?api-version=' + $ApiVersion
+        
+        $header = PrepAdoRestApiAuthHeader -SecurePat $pat
+
+        $ct = 'application/json'
+    }
+    process {
+
+        Invoke-RestMethod -Uri $uri -Headers $header -Method Get -ContentType $ct
+    }
+    end {}
+}
+
+function Invoke-JhcAdoRestGitListItem {
+    param (
+        [Parameter(Position = 0, Mandatory = $false)]
+        [System.Security.SecureString]
+        $Pat = $JhcAdoRestPat,
+        [Parameter(Position = 1, Mandatory)]
+        [System.String]
+        $RepositoryId,
+        [Parameter(Position = 2)]
+        [ValidateSet("none", "oneLevel", "oneLevelPlusNestedEmptyFolders", "full")]
+        [System.String]
+        $RecursionLevel = "none",
+        [System.String]
+        $Organization = $JhcAdoRestOrganization,
+        [Parameter(Position = 3, Mandatory = $false)]
+        [System.String]
+        $ScopePath,
+        [Parameter(Position = 4, Mandatory = $false)]
+        [System.String]
+        $Branch,
+        [Parameter(Position = 5, Mandatory = $false)]
+        [System.String]
+        $Project = $JhcAdoRestProject,
+        [Parameter(Position = 6, Mandatory = $false)]
+        [System.String]
+        $ApiVersion = '7.1-preview.1'
+    )
+
+    begin {
+        if (-not $Pat) {
+            throw "PAT was not found. Run Set-JhcAdoRestEnvironment"
+        }
+        if (-not $JhcAdoRestOrganization) {
+            throw "JhcAdoRestOrganization was not found. Run Set-JhcAdoRestEnvironment"
+        }
+        if (-not $JhcAdoRestProject) {
+            throw "JhcAdoRestProject was not found. Run Set-JhcAdoRestEnvironment"
+        }
+        
+        # GET https://dev.azure.com/{organization}/{project}/_apis/git/repositories/{repositoryId}/items?api-version=7.1-preview.1
+        # GET https://dev.azure.com/{organization}/{project}/_apis/git/repositories/{repositoryId}/items?scopePath={scopePath}&recursionLevel={recursionLevel}&includeContentMetadata={includeContentMetadata}&latestProcessedChange={latestProcessedChange}&download={download}&includeLinks={includeLinks}&$format={$format}&versionDescriptor.version={versionDescriptor.version}&versionDescriptor.versionOptions={versionDescriptor.versionOptions}&versionDescriptor.versionType={versionDescriptor.versionType}&api-version=7.1-preview.1
+
+        $uri = 'https://dev.azure.com/' + $Organization + '/' + $Project + '/_apis/git/repositories/' + $RepositoryId  + '/items?scopePath=' + $ScopePath + '&recursionLevel=' + $RecursionLevel
+        
+        $header = PrepAdoRestApiAuthHeader -SecurePat $pat
+
+        $ct = 'application/json'
+    }
+    process {
+
+        if($null -ne $Ref) {
+            $uri += '&versionDescriptor.version=' + $Ref + '&versionDescriptor.versionType=branch'
+        }
+        
+        $uri += '&api-version=' + $ApiVersion
+
+        Invoke-RestMethod -Uri $uri -Headers $header -Method Get -ContentType $ct
+    }
+    end {}
+}
+
 function Invoke-JhcAdoRestGitCommits {
     param (
         [Parameter(Position = 0, Mandatory = $false)]
@@ -464,44 +609,6 @@ function Invoke-JhcAdoRestGitCommits {
         }
 
         $uri = 'https://dev.azure.com/' + $Organization + '/' + $Project + '/_apis/git/repositories/' + $repositoryId + '/commits?searchCriteria.itemPath=' + $itemPath + '&api-version=' + $ApiVersion
-
-        $header = PrepAdoRestApiAuthHeader -SecurePat $pat
-
-        $ct = 'application/json'
-    }
-    process {
-        Invoke-RestMethod -Uri $uri -Headers $header -Method Get -ContentType $ct
-    }
-    end {}
-}
-
-function Invoke-JhcAdoRestListRepositories{
-    param (
-        [Parameter(Position = 0, Mandatory = $false)]
-        [System.Security.SecureString]
-        $Pat = $JhcAdoRestPat,
-        [Parameter(Position = 2, Mandatory = $false)]
-        [System.String]
-        $Organization = $JhcAdoRestOrganization,
-        [Parameter(Position = 3, Mandatory = $false)]
-        [System.String]
-        $Project = $JhcAdoRestProject,
-        [Parameter(Position = 4, Mandatory = $false)]
-        [System.String]
-        $ApiVersion = '6.0'
-    )
-    begin {
-        if (-not $Pat) {
-            throw "PAT was not found. Run Set-JhcAdoRestEnvironment"
-        }
-        if (-not $JhcAdoRestOrganization) {
-            throw "JhcAdoRestOrganization was not found. Run Set-JhcAdoRestEnvironment"
-        }
-        if (-not $JhcAdoRestProject) {
-            throw "JhcAdoRestProject was not found. Run Set-JhcAdoRestEnvironment"
-        }
-
-        $uri = 'https://dev.azure.com/' + $Organization + '/' + $Project + '/_apis/git/repositories?api-version=' + $ApiVersion
 
         $header = PrepAdoRestApiAuthHeader -SecurePat $pat
 
@@ -1028,6 +1135,71 @@ function Select-JhcAdoRestBuild {
 
     end {}
 }
+
+function Select-JhcAdoRestGitRepo {
+    
+    param (
+        [Parameter(Position = 0, Mandatory, ValueFromPipeline = $true)]
+        [System.Object[]]
+        $Obj
+    )
+  
+    begin {
+        $p = 'id', 'name', 'defaultBranch', 'webUrl'
+    }
+
+    process {
+        foreach ($v in $Obj.value) {
+            $v | Select-Object -Property $p
+        }
+    }
+
+    end {}
+}
+
+function Select-JhcAdoRestGitRefs {
+    
+    param (
+        [Parameter(Position = 0, Mandatory, ValueFromPipeline = $true)]
+        [System.Object[]]
+        $Obj
+    )
+  
+    begin {
+        $p = 'name', @{n='creatorName'; e={$_.creator.displayName}}
+    }
+
+    process {
+        foreach ($v in $Obj.value) {
+            $v | Select-Object -Property $p
+        }
+    }
+
+    end {}
+}
+
+function Select-JhcAdoRestGitListItem {
+    
+    param (
+        [Parameter(Position = 0, Mandatory, ValueFromPipeline = $true)]
+        [System.Object[]]
+        $Obj
+    )
+  
+    begin {
+        $p = 'objectId', 'gitObjectType', 'commitId', 'path', 'isFolder'
+    }
+
+    process {
+        foreach ($v in $Obj.value) {
+            $v | Select-Object -Property $p
+        }
+    }
+
+    end {}
+}
+
+
 function Select-JhcAdoRestReleaseDefinition {
     
     param (

@@ -12,7 +12,7 @@
 RootModule = 'JhcAdoRest.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.2.0'
+ModuleVersion = '1.2.1'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -71,34 +71,37 @@ Description = 'Collection of Cmdlets that run Azure Dev Ops Rest API calls. Prov
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
 FunctionsToExport = @(
     'Get-JhcAdoRestEnvironment',
-    'Set-JhcAdoRestEnvironment',
-    'Invoke-JhcAdoRestPipelinePreviewRun',
-    'Invoke-JhcAdoRestBuildDefinition',
-    'Invoke-JhcAdoRestBuildList',
-    'Invoke-JhcAdoRestPipeline',
-    'Invoke-JhcAdoRestPipelineRuns',
-    'Invoke-JhcAdoRestBuild',
-    'Invoke-JhcAdoRestBuildTimeline',
-    'Invoke-JhcAdoRestBuildListArtifacts',
-    'Invoke-JhcAdoRestGitPullRequest',
-    'Invoke-JhcAdoRestGetCommits',
-    'Invoke-JhcAdoRestListRepositories',
-    'Invoke-JhcAdoRestListBranchPolicies',
-    'Invoke-JhcAdoRestGetBranchPolicyRevision',
-    'Invoke-JhcAdoRestCodeSearch',
-    'Invoke-JhcAdoRestReleaseDefinition',
-    'Invoke-JhcAdoRestRelease',
     'Invoke-JhcAdoRestAgentPool',
     'Invoke-JhcAdoRestAgentQueue',
-    'Invoke-JhcAdoRestTasks',
+    'Invoke-JhcAdoRestBuild',
+    'Invoke-JhcAdoRestBuildDefinition',
+    'Invoke-JhcAdoRestBuildList',
+    'Invoke-JhcAdoRestBuildListArtifacts',
+    'Invoke-JhcAdoRestBuildTimeline',
+    'Invoke-JhcAdoRestCodeSearch',
+    'Invoke-JhcAdoRestGitPullRequest',
+    'Invoke-JhcAdoRestGitListRefs',
+    'Invoke-JhcAdoRestGitListRepos',
+    'Invoke-JhcAdoRestGitListItem',
+    'Invoke-JhcAdoRestListBranchPolicies',
+    'Invoke-JhcAdoRestPipeline',
+    'Invoke-JhcAdoRestPipelinePreviewRun',
+    'Invoke-JhcAdoRestPipelineRuns',
+    'Invoke-JhcAdoRestRelease',
+    'Invoke-JhcAdoRestReleaseDefinition',
     'Invoke-JhcAdoRestTaskGroups',
-    'Select-JhcAdoRestAgentQueue',
+    'Invoke-JhcAdoRestTasks',
     'Select-JhcAdoRestAgentPool',
-    'Select-JhcAdoRestBuildDefinition',
+    'Select-JhcAdoRestAgentQueue',
     'Select-JhcAdoRestBuild',
-    'Select-JhcAdoRestReleaseDefinition',
+    'Select-JhcAdoRestBuildDefinition',
     'Select-JhcAdoRestRelease',
-    'Select-JhcAdoRestTasks'    
+    'Select-JhcAdoRestReleaseDefinition',
+    'Select-JhcAdoRestTasks',
+    'Select-JhcAdoRestGitRepo'
+    'Select-JhcAdoRestGitRefs',
+    'Select-JhcAdoRestGitListItem',
+    'Set-JhcAdoRestEnvironment'
 )
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.

@@ -532,7 +532,7 @@ function Invoke-JhcAdoRestGitListItem {
         $ScopePath,
         [Parameter(Position = 4, Mandatory = $false)]
         [System.String]
-        $Branch,
+        $RefName,
         [Parameter(Position = 5, Mandatory = $false)]
         [System.String]
         $Organization = $JhcAdoRestOrganization,
@@ -566,8 +566,8 @@ function Invoke-JhcAdoRestGitListItem {
     }
     process {
 
-        if($null -ne $Ref) {
-            $uri += '&versionDescriptor.version=' + $Ref + '&versionDescriptor.versionType=branch'
+        if($null -ne $RefName) {
+            $uri += '&versionDescriptor.version=' + $RefName + '&versionDescriptor.versionType=branch'
         }
         
         $uri += '&api-version=' + $ApiVersion
@@ -594,7 +594,7 @@ function Invoke-JhcAdoRestGitItem {
         $ScopePath,
         [Parameter(Position = 4, Mandatory = $false)]
         [System.String]
-        $Branch,
+        $RefName,
         [Parameter(Position = 5, Mandatory = $false)]
         [switch]
         $Download = $false,
@@ -631,8 +631,8 @@ function Invoke-JhcAdoRestGitItem {
     }
     process {
 
-        if($null -ne $Ref) {
-            $uri += '&versionDescriptor.version=' + $Ref + '&versionDescriptor.versionType=branch'
+        if($null -ne $RefName) {
+            $uri += '&versionDescriptor.version=' + $RefName + '&versionDescriptor.versionType=branch'
         }
 
         if($null -ne $Download){

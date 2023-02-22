@@ -44,7 +44,7 @@ function Invoke-JhcAdoRestPipelinePreviewRun {
     }
     process {
 
-        if($null -ne $RefName){
+        if($RefName){
             $body = "{
                 `n    `"resources`": {
                 `n        `"repositories`": {
@@ -1310,7 +1310,7 @@ function Select-JhcAdoRestReleaseDefinition {
             elseif ($ExpandPhases -or $ExpandTasks) {
                 foreach ($env in $obj.environments) {
                                         
-                    $line = $obj | Select-Object -Property ($p + @{n = 'envId'; e = { $env.id } }, @{n = 'envName'; e = { $env.name } }, @{n = 'conditionNames'; e={$env.conditions.name}})
+                    $line = $obj | Select-Object -Property ($p + @{n = 'envId'; e = { $env.id } }, @{n = 'envRank'; e = { $env.rank } }, @{n = 'envName'; e = { $env.name } }, @{n = 'conditionNames'; e={$env.conditions.name}})
 
                     if($ExpandPreApprovals) {
                         Add-Member -InputObject $line -MemberType NoteProperty -Name 'automatedApproval' -Value $env.preDeployApprovals.approvals.isAutomated  -Force

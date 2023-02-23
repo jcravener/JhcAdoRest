@@ -12,7 +12,7 @@
 RootModule = 'JhcAdoRest.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.2.4'
+ModuleVersion = '1.2.5'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -74,6 +74,7 @@ FunctionsToExport = @(
     'Invoke-JhcAdoRestAgentPool',
     'Invoke-JhcAdoRestAgentQueue',
     'Invoke-JhcAdoRestBuild',
+    'Invoke-JhcAdoRestBuildLog',
     'Invoke-JhcAdoRestBuildDefinition',
     'Invoke-JhcAdoRestBuildList',
     'Invoke-JhcAdoRestBuildListArtifacts',
@@ -104,6 +105,7 @@ FunctionsToExport = @(
     'Select-JhcAdoRestTasks',
     'Set-JhcAdoRestEnvironment'
 )
+    
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = @()

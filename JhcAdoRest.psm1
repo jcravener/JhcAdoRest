@@ -119,6 +119,9 @@ function Invoke-JhcAdoRestBuildList {
         [Parameter(Position = 2, Mandatory = $false)]
         [System.String]
         $Top = 1,
+        [Parameter(Position = 2, Mandatory = $false)]
+        [System.DateTime]
+        $MinTime, # = Get-Date -Format 'yyyy-MM-ddTHH:mm:ssZ',
         [Parameter(Position = 3, Mandatory = $false)]
         [System.String]
         $Organization = $JhcAdoRestOrganization,
@@ -142,7 +145,18 @@ function Invoke-JhcAdoRestBuildList {
             throw "JhcAdoRestProject was not found. Run Set-JhcAdoRestEnvironment"
         }
         
-        $uri = 'https://dev.azure.com/' + $Organization + '/' + $Project + '/_apis/build/builds?definitions=' + $PipelineId +  '&$top=' + $Top +  '&api-version=' + $ApiVersion
+        $uri = 'https://dev.azure.com/' + $Organization + '/' + $Project + '/_apis/build/builds?definitions=' + $PipelineId #+  '&$top=' + $Top +  '&api-version=' + $ApiVersion
+
+        if($MinTime){
+
+            $uri += '&minTime=' + $MinTime.ToString('yyyy-MM-ddTHH:mm:ssZ')
+        }
+        else {
+
+            $uri += '&$top=' + $Top
+        }
+
+        $uri += '&api-version=' + $ApiVersion
         
         $header = PrepAdoRestApiAuthHeader -SecurePat $pat
 
@@ -1242,7 +1256,7 @@ function Select-JhcAdoRestBuild {
     )
   
     begin {
-        $p = 'id', @{n='definitionId'; e = {$_.definition.id}}, 'buildNumber', 'status', 'result', 'startTime', @{n='requestedForName'; e = { $_.requestedFor.uniqueName }}
+        $p = 'id', @{n='definitionId'; e = {$_.definition.id}}, @{n='definitionName'; e = {$_.definition.name}}, @{n='definitionPath'; e = {$_.definition.path}}, 'buildNumber', 'status', 'result', 'startTime', @{n='requestedForName'; e = { $_.requestedFor.uniqueName }}, @{n='pool'; e={$_.queue | % pool}}, @{n='uri'; e={$_._links | % web | % href}}
     }
 
     process {

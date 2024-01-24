@@ -119,18 +119,23 @@ function Invoke-JhcAdoRestBuildList {
         [Parameter(Position = 2, Mandatory = $false)]
         [System.String]
         $Top = 1,
-        [Parameter(Position = 2, Mandatory = $false)]
-        [System.DateTime]
-        $MinTime, # = Get-Date -Format 'yyyy-MM-ddTHH:mm:ssZ',
         [Parameter(Position = 3, Mandatory = $false)]
-        [System.String]
-        $Organization = $JhcAdoRestOrganization,
+        [Alias('After')]
+        [System.DateTime]
+        $MinTime, # = Get-Date -Format 'yyyy-MM-ddTHH:mm:ssZ', filters to builds that finished/started/queued after this date
         [Parameter(Position = 4, Mandatory = $false)]
-        [System.String]
-        $Project = $JhcAdoRestProject,
+        [Alias('Before')]
+        [System.DateTime]
+        $MaxTime, # = Get-Date -Format 'yyyy-MM-ddTHH:mm:ssZ', filters to builds that finished/started/queued before this date
         [Parameter(Position = 5, Mandatory = $false)]
         [System.String]
-        $ApiVersion = '6.1-preview.7'
+        $Organization = $JhcAdoRestOrganization,
+        [Parameter(Position = 6, Mandatory = $false)]
+        [System.String]
+        $Project = $JhcAdoRestProject,
+        [Parameter(Position = 7, Mandatory = $false)]
+        [System.String]
+        $ApiVersion = '7.2-preview.7'
     )
 
     begin {
@@ -144,12 +149,17 @@ function Invoke-JhcAdoRestBuildList {
         if (-not $JhcAdoRestProject) {
             throw "JhcAdoRestProject was not found. Run Set-JhcAdoRestEnvironment"
         }
-        
+                
         $uri = 'https://dev.azure.com/' + $Organization + '/' + $Project + '/_apis/build/builds?definitions=' + $PipelineId #+  '&$top=' + $Top +  '&api-version=' + $ApiVersion
 
         if($MinTime){
 
             $uri += '&minTime=' + $MinTime.ToString('yyyy-MM-ddTHH:mm:ssZ')
+
+            if($MaxTime){
+                    
+                $uri += '&maxTime=' + $MaxTime.ToString('yyyy-MM-ddTHH:mm:ssZ')
+            }
         }
         else {
 
@@ -1256,7 +1266,7 @@ function Select-JhcAdoRestBuild {
     )
   
     begin {
-        $p = 'id', @{n='definitionId'; e = {$_.definition.id}}, @{n='definitionName'; e = {$_.definition.name}}, @{n='definitionPath'; e = {$_.definition.path}}, 'buildNumber', 'status', 'result', 'startTime', @{n='requestedForName'; e = { $_.requestedFor.uniqueName }}, @{n='pool'; e={$_.queue | % pool}}, @{n='uri'; e={$_._links | % web | % href}}
+        $p = 'id', @{n='definitionId'; e = {$_.definition.id}}, @{n='definitionName'; e = {$_.definition.name}}, @{n='definitionPath'; e = {$_.definition.path}}, 'buildNumber', 'status', 'result', @{n='toLocalStartTime'; e={$_.startTime.ToLocalTime()}}, 'startTime',  @{n='requestedForName'; e = { $_.requestedFor.uniqueName }}, @{n='pool'; e={$_.queue | % pool}}, @{n='uri'; e={$_._links | % web | % href}}
     }
 
     process {

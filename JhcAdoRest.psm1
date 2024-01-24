@@ -1266,7 +1266,7 @@ function Select-JhcAdoRestBuild {
     )
   
     begin {
-        $p = 'id', @{n='definitionId'; e = {$_.definition.id}}, @{n='definitionName'; e = {$_.definition.name}}, @{n='definitionPath'; e = {$_.definition.path}}, 'buildNumber', 'status', 'result', @{n='toLocalStartTime'; e={$_.startTime.ToLocalTime()}}, 'startTime',  @{n='requestedForName'; e = { $_.requestedFor.uniqueName }}, @{n='pool'; e={$_.queue | % pool}}, @{n='uri'; e={$_._links | % web | % href}}
+        $p = 'id', @{n='definitionId'; e = {$_.definition.id}}, @{n='definitionName'; e = {$_.definition.name}}, @{n='definitionPath'; e = {$_.definition.path}}, 'buildNumber', 'status', 'result', @{n='toLocalStartTime'; e={$_.startTime.ToLocalTime()}}, 'startTime',  @{n={'toLocalFinishTime'}; e={$_.finishTime.ToLocalTime()}}, 'finishTime', @{n='requestedForName'; e = { $_.requestedFor.uniqueName }}, @{n='pool'; e={$_.queue | % pool}}, @{n='uri'; e={$_._links | % web | % href}}
     }
 
     process {

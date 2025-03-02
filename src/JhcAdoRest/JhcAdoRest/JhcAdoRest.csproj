@@ -16,4 +16,8 @@
 		</None>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="cmdlets\Build\" />
+	</ItemGroup>
+
 </Project>

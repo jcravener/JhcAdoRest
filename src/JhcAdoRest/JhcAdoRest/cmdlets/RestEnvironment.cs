@@ -30,7 +30,7 @@ namespace JhcAdoRest.cmdlets
                 Pat = Pat
             };
 
-            SessionState.PSVariable.Set("RestEnvironment", context);
+            SessionState.PSVariable.Set(Constants.ContextVariableName, context);
         }
     }
 }

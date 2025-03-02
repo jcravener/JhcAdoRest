@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 
 namespace JhcAdoRest.Client
 {
-    public class ApiClient : IApiClient
+    public class ApiClient : IApiClient, IDisposable
     {
         private readonly HttpClient _httpClient;
+        private bool _disposed;
 
         public ApiClient(HttpClient httpClient, string personalAccessToken)
         {
@@ -29,9 +30,20 @@ namespace JhcAdoRest.Client
 
         public async Task<string> GetAsync(string endpoint)
         {
-            var response = await _httpClient.GetAsync(endpoint);
-            response.EnsureSuccessStatusCode();
-            return await response.Content.ReadAsStringAsync();
+            try
+            {
+                var response = await _httpClient.GetAsync(endpoint);
+                response.EnsureSuccessStatusCode();
+                return await response.Content.ReadAsStringAsync();
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new Exception($"Http reguest error making GET request to {endpoint}", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error making GET request to {endpoint}", ex);
+            }
         }
 
         public async Task<string> PostAsync(string endpoint, object payload)
@@ -62,6 +74,24 @@ namespace JhcAdoRest.Client
         {
             var response = await _httpClient.DeleteAsync(endpoint);
             response.EnsureSuccessStatusCode();
+        }
+
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed) return;
+
+            if (disposing)
+            {
+                _httpClient.Dispose();
+            }
+
+            _disposed = true;
         }
     }
 }

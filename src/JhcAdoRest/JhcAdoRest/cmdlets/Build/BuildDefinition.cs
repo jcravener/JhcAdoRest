@@ -1,11 +1,10 @@
 ﻿using JhcAdoRest.Client;
+using JhcAdoRest.cmdlets.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
-using System.Text;
-using System.Threading.Tasks;
-
+using System.Text.Json;
 namespace JhcAdoRest.cmdlets.Build
 {
     [Cmdlet("Invoke", "BuildDefinition")]
@@ -25,13 +24,15 @@ namespace JhcAdoRest.cmdlets.Build
                 var factory = new ApiClientFactory(this);
                 using var client = factory.CreateClient();
 
-                var result = client.GetAsync(Endpoint).GetAwaiter().GetResult();
+                string result = client.GetAsync(Endpoint).GetAwaiter().GetResult();
 
-                WriteObject(result);
+                PSObject psObject = JsonToPSObjectConverter.ConvertJsonToPSObject(result);
+
+                WriteObject(psObject);
             }
             catch (Exception ex)
             {
-                ThrowTerminatingError(new ErrorRecord(ex, "InvokeBuildDefinitionError", ErrorCategory.NotSpecified, null));
+                ThrowTerminatingError(new ErrorRecord(ex, nameof(BuildDefinition), ErrorCategory.NotSpecified, null));
             }
         }
     }
